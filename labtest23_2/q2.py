@@ -1,6 +1,6 @@
 from numpy import array, zeros, ones, identity, diag, linspace, sqrt
 from numpy.linalg import norm, eigvals, cond, lstsq
-from matplotlib.pyplot import plot
+from matplotlib.pyplot import plot, show
 from scipy.linalg import lu, qr
 from scipy.interpolate import CubicSpline
 
@@ -24,3 +24,4 @@ tplt = linspace(1, 10, 91)
 ypltspline = pp(tplt)
 ypltls = xls[0] + xls[1] * sqrt(tplt) + xls[2] * tplt + xls[3] * tplt**2
 plot(tdat,ydat,'*', tplt,ypltspline,tplt,ypltls)
+show()
