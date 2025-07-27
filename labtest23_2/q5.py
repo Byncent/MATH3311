@@ -1,4 +1,4 @@
-from numpy import array, zeros, ones, identity, diag, linspace, sqrt, exp, pi, sin, cos, log
+from numpy import array, zeros, ones, identity, diag, linspace,inf, sqrt, exp, pi, sin, cos, log
 from numpy.linalg import norm, eigvals, cond, lstsq, solve
 from matplotlib.pyplot import plot, show
 from scipy.linalg import lu, qr
@@ -12,38 +12,26 @@ def approx(N):
     d2 = ones(N-1)
 
     A = diag(d1) + diag(d2, 1) + diag(d2, -1)
-    A[0] = [3, -4, 1, 0]
+    a0 = zeros(N)
+    a0[0] = 3
+    a0[1] = -4
+    a0[2] = 1
+    A[0] = a0
 
     a = ones(N) * h**2 * (1 + pi**2 / 4) * cos(pi + pi * x[:N] / 2)
     a[0] = 0
-    print(a)
-    U4 = solve(A, a)
+    return solve(A, a)
 
+print(approx(4))
 
-# Initial parameters
-N = 4
-x = linspace(0, 1, N + 1)
-U4 = zeros(N)
-h = 1 / N
+E = zeros(3)
+for i in range(0, 3):
+    N = 2 ** i * 80
+    x = linspace(0, 1, N + 1)
+    E[i] = norm(approx(N) - cos(pi/2*x[:N]).T, inf)
 
-# Matrix components
-d1 = ones(N - 1)
-d4 = ones(N - 1)
-d1[0] = -4
-
-d2 = zeros(N - 2)
-d2[0] = 1
-
-d3 = ones(N) * (-2 - h**2)
-d3[0] = 3
-
-# Construct matrix A and right-hand side vector a
-A = diag(d1, 1) + diag(d4, -1) + diag(d3) + diag(d2, 2)
-a = zeros(N)
-a[1:] = h**2 * (1 + pi**2 / 4) * cos(pi + pi / 2 * x[1:N])
-print(a)
-# Solve system
-U4 = solve(A, a)
-
-
-approx(4)
+OC = zeros(2)
+OC[0] = log(E[0] / E[1]) / log(2)
+OC[1] = log(E[1] / E[2]) / log(2)
+print(E)
+print(OC)
